@@ -1,18 +1,29 @@
 import React from 'react';
 import products from '../products.json'
+import '../styles/Games.css'
+
 const Games = () => {
     return(
-        <div className='games-list'>
+        <div className='games-content'>
+            <select className='filter'>
+                <option value="preço">Ordernar por preço</option>
+                <option value="popularidade">Ordernar por popularidade</option>
+                <option value="alfabetica">Ordernar por ordem alfabética</option>
+            </select>
+            <div className='games-list'>
             {products.map((game, index) => (
                 <div className='game' key={index}>
-                    <span className='game-id'>{game.id}</span>
-                    <span className='game-score'>{game.score}</span>
-                    <img src={`../images/${game.image}`} alt={game.name} />
-                    <span className='game-id'>{game.id}</span>
+                    <div className='id-and-score'>
+                    <span className='game-id'>{`ID:${game.id}`}</span>
+                    <span className='game-score'>{`Score:${game.score}`}</span>
+                    </div>
+                    <img src={require(`../images/${game.image}`)} alt={game.name} />
                     <span className='game-name'>{game.name}</span>
-                    <span className='game-price'>{game.price}</span>
+                    <span className='game-price'>{`R$${game.price.toFixed(2)}`}</span>
+                    <button type='button' className='add-to-cart'>Adicionar ao carrinho</button>
                 </div>
             ))}
+            </div>
         </div>
     )
 }
