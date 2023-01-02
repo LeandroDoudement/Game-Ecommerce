@@ -1,9 +1,12 @@
 import React from 'react';
+import Header from '../components/Header';
+import Games from '../components/Games';
 
 const Home = () => {
     return(
         <div className='homepage'>
-            <h1>Home</h1>
+            <Header />
+            <Games />
         </div>
     )
 }
