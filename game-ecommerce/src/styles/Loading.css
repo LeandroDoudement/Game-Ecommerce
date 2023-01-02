@@ -1,0 +1,42 @@
+.divLoading p {
+  color: black;
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0 auto;
+  text-shadow: 10px 10px 10px white;
+}
+
+.loading {
+  animation: spin 0.2s linear infinite;
+  border: 10px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid #3498db;
+  box-shadow: 5px 5px 20px 10px black;
+  height: 100px;
+  left: 46.5%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(190deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .loading {
+    left: 35%;
+    top: 60%;
+  }
+}
