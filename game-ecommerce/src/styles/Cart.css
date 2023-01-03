@@ -1,0 +1,140 @@
+.cart-page {
+  display: flex;
+  margin-top: 20px;
+}
+
+.cart-page-wrapper .cart-wrapper {
+  display: none;
+}
+
+.cart-page-wrapper .logo {
+  margin: 10px auto;
+}
+
+.cart-box {
+  background-color: white;
+  width: 430px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 200px;
+}
+
+.cart-and-payment-wrapper {
+  display: flex;
+  margin: 0px auto;
+  gap: 10px;
+}
+
+.cart-title {
+  align-self: center;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 20px;
+  text-align: center;
+  color: black;
+  margin-top: 10px;
+}
+
+hr {
+  width: 80%;
+  border: 1px solid #94979d;
+}
+
+.item-wrapper {
+  margin-top: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 320px;
+}
+
+.delete-product {
+  align-self: center;
+}
+
+.delete-product-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.item-img {
+  width: 50px;
+}
+
+.item-name {
+  font-size: 11px;
+}
+
+.item-quantity {
+  background-color: #b0b3bb;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.total-price-box {
+  box-shadow: 0px 4px 15px rgb(0 0 0 / 25%);
+  display: flex;
+  width: 200px;
+  height: 100px;
+  flex-direction: column;
+  background-color: white;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.payment-button {
+  width: 150px;
+  height: 25px;
+  background-color: #31c28d;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+  color: white;
+}
+
+.empty-cart {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 31px;
+  text-align: center;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  color: #31c28d;
+  margin: auto;
+}
+
+@media screen and (max-width: 650px) {
+  .cart-and-payment-wrapper {
+    flex-direction: column;
+  }
+
+  .cart-and-payment-wrapper {
+    gap: 20px;
+  }
+
+  .cart-box {
+    width: 320px;
+    min-height: 400px;
+  }
+
+  .item {
+    max-width: 280px;
+  }
+
+  .item-name {
+    font-size: 7px;
+  }
+}

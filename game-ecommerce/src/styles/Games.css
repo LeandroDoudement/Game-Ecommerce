@@ -1,0 +1,63 @@
+.games-content {
+  background-color: #e0e0e0;
+  text-align: -webkit-center;
+}
+
+.filter {
+  margin: 10px 0px;
+  width: 250px;
+  height: 30px;
+  box-sizing: border-box;
+  border: 1px solid #94979d;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 16px;
+  font-style: italic;
+  color: #94979d;
+}
+
+.games-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  max-width: 150px;
+  max-height: 250px;
+  margin: 15px;
+  box-shadow: 2.8px 2.8px 5.5px rgba(0, 0, 0, 0.05);
+  background-color: white;
+}
+
+.score {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-score {
+  font-style: italic;
+  font-size: 8px;
+  margin: 2px 3px;
+}
+
+.game-name {
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  color: black;
+}
+
+.add-to-cart {
+  margin: 0px auto;
+  width: 135px;
+  height: 35px;
+  background-color: #a80000;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+
+  color: white;
+}
