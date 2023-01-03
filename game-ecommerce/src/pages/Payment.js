@@ -200,9 +200,11 @@ const Payment = () => {
               </div>
             ))
           )}
+          <div className='payment-wrapper'>
           <span>{`Subtotal: ${subTotal}`}</span>
           <span>{frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}</span>
           <span>{`${cartItems.length} items: R$${totalPrice.toFixed(2)}`}</span>
+          </div>
         </div>
         <div className='form-wrapper'>
           <span className='informations-title'>Informações do comprador:</span>
