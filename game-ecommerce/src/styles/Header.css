@@ -3,18 +3,40 @@ header {
   background-color: #a80000;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .logo {
   width: 50px;
   margin: 10px 0px;
-  margin-left: auto;
   align-self: center;
 }
 
+.home-wrapper {
+  position: relative;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cart-wrapper {
+  position: relative;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-title {
+  margin-top: 5px;
+  font-size: 10px;
+}
+
 .cart-icon {
-  margin-left: auto;
-  margin-right: 10px;
+  cursor: pointer;
+}
+
+.home-icon {
   cursor: pointer;
 }
