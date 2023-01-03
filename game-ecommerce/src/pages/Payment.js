@@ -24,7 +24,7 @@ const Payment = () => {
   const [cardExpiration, setCardExpiration] = useState('');
   const [cardCVC, setCardCVC] = useState('');
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!localStorage.getItem('games')) {
@@ -65,7 +65,6 @@ const Payment = () => {
   const adressVerification = adress.length > 5;
   const cityVerification = adressCity.length > 3;
   const stateVerification = adressState !== '';
-  
 
   const checkInformationsValidation = () => {
     const allVerification =
@@ -92,9 +91,9 @@ const Payment = () => {
       cardExpirationRegex.test(cardExpiration),
       adressVerification,
       cityVerification,
-      stateVerification
+      stateVerification,
     ];
-  
+
     const invalidFields = [];
     allVerifications.forEach((verification, index) => {
       if (!verification) {
@@ -117,40 +116,43 @@ const Payment = () => {
           case 5:
             invalidFields.push('CVC');
             break;
-            case 6:
+          case 6:
             invalidFields.push('Endereço');
-            break
-            case 7:
+            break;
+          case 7:
             invalidFields.push('Cidade');
-            break
-            case 8:
+            break;
+          case 8:
             invalidFields.push('Estado');
-            break
+            break;
           default:
             break;
         }
       }
     });
-  
+
     if (invalidFields.length > 0) {
-      alert(`Os seguintes campos estão incorretos: ${invalidFields.join(', ')}`);
+      alert(
+        `Os seguintes campos estão incorretos: ${invalidFields.join(', ')}`
+      );
     }
   };
 
   const validatePayment = () => {
-    if(cartItems.length === 0){
-      alert('Seu carrinho está vazio, retornando a pagina principal')
-      navigate('/')
+    if (cartItems.length === 0) {
+      alert('Seu carrinho está vazio, retornando a pagina principal');
+      navigate('/');
     }
-    if(checkInformationsValidation()){
-      alert('Parabéns, sua compra foi realizada, retornando a pagina principal')
-      navigate('/')
-      localStorage.removeItem('games')
+    if (checkInformationsValidation()) {
+      alert(
+        'Parabéns, sua compra foi realizada, retornando a pagina principal'
+      );
+      navigate('/');
+      localStorage.removeItem('games');
+    } else {
+      displayIncorrectInformations();
     }
-    else{
-      displayIncorrectInformations()
-    }
-  }
+  };
 
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -195,6 +197,11 @@ const Payment = () => {
               </div>
             ))
           )}
+          <span>
+              {totalPrice > 250
+                ? `Frete Gratis!`
+                : `Frete: ${(cartItems.length * 10).toFixed(2)}`}
+            </span>
           <span>{`Total: R$ ${totalPrice.toFixed(2)}`}</span>
         </div>
         <div className='form-wrapper'>
@@ -275,10 +282,7 @@ const Payment = () => {
               onChange={({ target: { value } }) => setCardCVC(value)}
             />
           </form>
-          <button
-            className='payment-button'
-            onClick={() => validatePayment()}
-          >
+          <button className='payment-button' onClick={() => validatePayment()}>
             Finalizar compra
           </button>
         </div>
