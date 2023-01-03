@@ -45,6 +45,17 @@ const Games = () => {
 
   const addToCart = (game) => {
     let cartItems;
+    const checkIfAlreadyExists = localStorage.getItem('games')
+      ? JSON.parse(localStorage.getItem('games')).some(
+          (element) => JSON.stringify(element) === JSON.stringify(game)
+        )
+      : false;
+    if (checkIfAlreadyExists) {
+      alert(
+        'Você já adicionou esse produto, para aumentar a quantidade siga ao carrinho'
+      );
+      return;
+    }
     if (localStorage.getItem('games')) {
       cartItems = [...JSON.parse(localStorage.getItem('games')), game];
     } else {
