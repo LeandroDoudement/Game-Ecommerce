@@ -154,10 +154,13 @@ const Payment = () => {
     }
   };
 
-  const totalPrice = cartItems.reduce(
+  const subTotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+  const frete = subTotal > 250 ? 0 : (cartItems.length * 10).toFixed(2);
+
+  const totalPrice = Number(subTotal) + Number(frete);
 
   return (
     <div className='payment-page'>
@@ -197,12 +200,9 @@ const Payment = () => {
               </div>
             ))
           )}
-          <span>
-              {totalPrice > 250
-                ? `Frete Gratis!`
-                : `Frete: ${(cartItems.length * 10).toFixed(2)}`}
-            </span>
-          <span>{`Total: R$ ${totalPrice.toFixed(2)}`}</span>
+          <span>{`Subtotal: ${subTotal}`}</span>
+          <span>{frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}</span>
+          <span>{`${cartItems.length} items: R$${totalPrice.toFixed(2)}`}</span>
         </div>
         <div className='form-wrapper'>
           <span className='informations-title'>Informações do comprador:</span>
