@@ -6,9 +6,13 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
 import '../styles/Cart.css';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!localStorage.getItem('games')) {
       localStorage.setItem('games', JSON.stringify([]));
@@ -27,6 +31,7 @@ const Cart = () => {
             ? newItems[index].quantity + 1
             : newItems[index].quantity - 1;
       }
+      localStorage.setItem('games', JSON.stringify(newItems))
       return newItems;
     });
   };
@@ -53,8 +58,8 @@ const Cart = () => {
               <span className='empty-cart'>Seu carrinho está vazio</span>
             ) : (
               cartItems.map((item, index) => (
-                <div className='item-wrapper'>
-                  <div className='item' key={index}>
+                <div className='item-wrapper' key={index}>
+                  <div className='item' >
                     <FontAwesomeIcon
                       icon={faX}
                       className='delete-product'
@@ -93,7 +98,9 @@ const Cart = () => {
                 ? `Frete Gratis!`
                 : `Frete: ${(cartItems.length * 10).toFixed(2)}`}
             </span>
-            <button className='payment-button'>Finalizar compra</button>
+            <button 
+            className='payment-button'
+            onClick={() => navigate('/payment')}>Finalizar compra</button>
           </div>
         </div>
       </div>
