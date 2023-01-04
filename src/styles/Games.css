@@ -1,6 +1,6 @@
 .games-content {
-  background-color: #e0e0e0;
   text-align: -webkit-center;
+  height: 100%;
 }
 
 .filter {
@@ -55,6 +55,9 @@
   line-height: 16px;
   text-align: center;
   color: black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .add-to-cart {
@@ -67,4 +70,20 @@
   text-align: center;
 
   color: white;
+}
+
+.games-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media screen and (min-width: 1500px) {
+  .games-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 900px;
+    margin: 10px auto;
+  }
 }

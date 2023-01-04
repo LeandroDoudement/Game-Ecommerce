@@ -77,6 +77,7 @@ const Games = () => {
         <option value='preço'>Ordernar por preço</option>
       </select>
       <div className='games-list'>
+        <div className='games-wrapper'>
         {loading ? (
           <Loading />
         ) : (
@@ -101,6 +102,7 @@ const Games = () => {
             </div>
           ))
         )}
+      </div>
       </div>
     </div>
   );
