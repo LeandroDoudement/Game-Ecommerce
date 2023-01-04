@@ -1,4 +1,4 @@
-> Game-Ecommerce é uma aplicação desenvolvida com o intuito de um desafio técnica em que eu tinha que cumprir com os seguintes requisitos em até 3 dias:
+> Game-Ecommerce é uma aplicação desenvolvida para um desafio técnico em que os seguintes requisitos deveriam ser cumpridos em até 3 dias:
 - Os produtos devem ser renderizados dinamicamente através do products.json anexado, assets.zip anexados também
 - Os valores exibidos no checkout (frete, subtotal e total) devem ser calculados dinamicamente
 - O usuário poderá adicionar e remover produtos do carrinho
