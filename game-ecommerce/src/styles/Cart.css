@@ -4,7 +4,7 @@
 }
 
 .cart-page-wrapper .cart-wrapper {
-  display: none;
+  visibility: hidden;
 }
 
 .cart-page-wrapper .logo {
