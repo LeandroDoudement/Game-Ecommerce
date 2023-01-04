@@ -85,7 +85,7 @@ const Games = () => {
               <div className='score'>
                 <span className='game-score'>{`Score:${game.score}`}</span>
               </div>
-              <img src={require(`../images/${game.image}`)} alt={game.name} />
+              <img src={require(`../images/${game.image}`)} alt={game.name} className='game-image' />
               <span className='game-name' data-testid='game-name'>
                 {game.name}
               </span>

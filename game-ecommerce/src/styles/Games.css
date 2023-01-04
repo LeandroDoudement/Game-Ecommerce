@@ -43,6 +43,13 @@
   margin: 2px 3px;
 }
 
+.game-image {
+  width: 130px;
+  display: flex;
+  align-self: center;
+  margin: 3px auto;
+}
+
 .game-name {
   font-size: 11px;
   line-height: 16px;
