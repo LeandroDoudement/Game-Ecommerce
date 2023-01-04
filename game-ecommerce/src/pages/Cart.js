@@ -31,7 +31,7 @@ const Cart = () => {
             ? newItems[index].quantity + 1
             : newItems[index].quantity - 1;
       }
-      localStorage.setItem('games', JSON.stringify(newItems))
+      localStorage.setItem('games', JSON.stringify(newItems));
       return newItems;
     });
   };
@@ -42,10 +42,13 @@ const Cart = () => {
     setCartItems(newItems);
   };
 
-  const totalPrice = cartItems.reduce(
+  const subTotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+  const frete = subTotal > 250 ? 0 : (cartItems.length * 10).toFixed(2);
+
+  const totalPrice = Number(subTotal) + Number(frete);
 
   return (
     <div className='cart-page-wrapper'>
@@ -59,11 +62,12 @@ const Cart = () => {
             ) : (
               cartItems.map((item, index) => (
                 <div className='item-wrapper' key={index}>
-                  <div className='item' >
+                  <div className='item' data-testid='item'>
                     <FontAwesomeIcon
                       icon={faX}
                       className='delete-product'
                       onClick={() => removeCartItem(item)}
+                      data-testid='delete-product'
                     />
                     <img
                       src={require(`../images/${item.image}`)}
@@ -74,11 +78,15 @@ const Cart = () => {
                     <FontAwesomeIcon
                       icon={faMinus}
                       onClick={() => updateQuantity(index, '-')}
+                      data-testid='raise-quantity-button'
                     />
-                    <span className='item-quantity'>{item.quantity}</span>
+                    <span className='item-quantity' data-testid='item-quantity'>
+                      {item.quantity}
+                    </span>
                     <FontAwesomeIcon
                       icon={faPlus}
                       onClick={() => updateQuantity(index, '+')}
+                      data-testid='subtract-quantity-button'
                     />
                     <span>{`R$${(item.price * item.quantity).toFixed(
                       2
@@ -90,17 +98,21 @@ const Cart = () => {
             )}
           </div>
           <div className='total-price-box'>
-            <span>{`${cartItems.length} items: R$${totalPrice.toFixed(
+            <span data-testid='subtotal'>{`Subtotal: ${subTotal.toFixed(
               2
             )}`}</span>
-            <span>
-              {totalPrice > 250
-                ? `Frete Gratis!`
-                : `Frete: ${(cartItems.length * 10).toFixed(2)}`}
+            <span data-testid='frete'>
+              {frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}
             </span>
-            <button 
-            className='payment-button'
-            onClick={() => navigate('/payment')}>Finalizar compra</button>
+            <span data-testid='total'>{`${
+              cartItems.length
+            } items: R$${totalPrice.toFixed(2)}`}</span>
+            <button
+              className='payment-button'
+              onClick={() => navigate('/payment')}
+            >
+              Finalizar compra
+            </button>
           </div>
         </div>
       </div>
