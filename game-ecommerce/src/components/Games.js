@@ -69,6 +69,7 @@ const Games = () => {
       <select
         className='filter'
         onChange={({ target: { value } }) => setFilterOrder(value)}
+        data-testid='filter'
       >
         <option value=''>Ordernar por</option>
         <option value='popularidade'>Ordernar por popularidade</option>
@@ -80,17 +81,20 @@ const Games = () => {
           <Loading />
         ) : (
           gamesList.map((game) => (
-            <div className='game' key={game.id}>
+            <div className='game' key={game.id} data-testid='game'>
               <div className='score'>
                 <span className='game-score'>{`Score:${game.score}`}</span>
               </div>
               <img src={require(`../images/${game.image}`)} alt={game.name} />
-              <span className='game-name'>{game.name}</span>
+              <span className='game-name' data-testid='game-name'>
+                {game.name}
+              </span>
               <span className='game-price'>{`R$${game.price.toFixed(2)}`}</span>
               <button
                 type='button'
                 className='add-to-cart'
                 onClick={() => addToCart(game)}
+                data-testid='add-to-cart-button'
               >
                 Adicionar ao carrinho
               </button>

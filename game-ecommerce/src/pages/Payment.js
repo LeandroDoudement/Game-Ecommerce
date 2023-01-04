@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-escape */
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import states from '../states';
@@ -9,6 +11,10 @@ import '../styles/Payment.css';
 import { useNavigate } from 'react-router-dom';
 
 const Payment = () => {
+  // phone, residentialPhone, adressComplement e adressNumber ficaram sem uso no momento 
+  // pois não acho que deveriam ser obrigatórios pra fazer um pagamento. 
+  // Mas é claro que em uma aplicação real seria necessário, 
+  // no caso dessa que é apenas uma mini simulação, deixei sem obrigatoriedade.
   const [cartItems, setCartItems] = useState([]);
   const [username, setUsername] = useState('');
   const [CPF, setCPF] = useState('');
@@ -201,9 +207,11 @@ const Payment = () => {
             ))
           )}
           <div className='payment-wrapper'>
-          <span>{`Subtotal: ${subTotal}`}</span>
-          <span>{frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}</span>
-          <span>{`${cartItems.length} items: R$${totalPrice.toFixed(2)}`}</span>
+            <span>{`Subtotal: ${subTotal}`}</span>
+            <span>{frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}</span>
+            <span>{`${cartItems.length} items: R$${totalPrice.toFixed(
+              2
+            )}`}</span>
           </div>
         </div>
         <div className='form-wrapper'>
@@ -232,7 +240,7 @@ const Payment = () => {
             <input
               type='phone'
               placeholder='Telefone Residencial'
-              onChange={({ target: { value } }) => setPhone(value)}
+              onChange={({ target: { value } }) => setResidentialPhone(value)}
             />
             <input
               type='adress'

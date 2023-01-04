@@ -12,20 +12,22 @@ const Header = () => {
   return (
     <header>
       <div className='home-wrapper'>
-      <FontAwesomeIcon 
-      icon={faHouse}
-      onClick={() => navigate('/')}
-      className='home-icon' />
-      <span className='icon-title'>Home</span>
+        <FontAwesomeIcon
+          icon={faHouse}
+          onClick={() => navigate('/')}
+          className='home-icon'
+        />
+        <span className='icon-title'>Home</span>
       </div>
       <img src={controller} alt='logo' className='logo' />
       <div className='cart-wrapper'>
-      <FontAwesomeIcon
-        icon={faCartShopping}
-        className='cart-icon'
-        onClick={() => navigate('/cart')}
-      />
-      <span className='icon-title'>Carrinho</span>
+        <FontAwesomeIcon
+          icon={faCartShopping}
+          className='cart-icon'
+          onClick={() => navigate('/cart')}
+          data-testid='cart-icon'
+        />
+        <span className='icon-title'>Carrinho</span>
       </div>
     </header>
   );

@@ -62,11 +62,12 @@ const Cart = () => {
             ) : (
               cartItems.map((item, index) => (
                 <div className='item-wrapper' key={index}>
-                  <div className='item'>
+                  <div className='item' data-testid='item'>
                     <FontAwesomeIcon
                       icon={faX}
                       className='delete-product'
                       onClick={() => removeCartItem(item)}
+                      data-testid='delete-product'
                     />
                     <img
                       src={require(`../images/${item.image}`)}
@@ -77,11 +78,15 @@ const Cart = () => {
                     <FontAwesomeIcon
                       icon={faMinus}
                       onClick={() => updateQuantity(index, '-')}
+                      data-testid='raise-quantity-button'
                     />
-                    <span className='item-quantity'>{item.quantity}</span>
+                    <span className='item-quantity' data-testid='item-quantity'>
+                      {item.quantity}
+                    </span>
                     <FontAwesomeIcon
                       icon={faPlus}
                       onClick={() => updateQuantity(index, '+')}
+                      data-testid='subtract-quantity-button'
                     />
                     <span>{`R$${(item.price * item.quantity).toFixed(
                       2
@@ -93,11 +98,15 @@ const Cart = () => {
             )}
           </div>
           <div className='total-price-box'>
-            <span>{`Subtotal: ${subTotal}`}</span>
-            <span>{frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}</span>
-            <span>{`${cartItems.length} items: R$${totalPrice.toFixed(
+            <span data-testid='subtotal'>{`Subtotal: ${subTotal.toFixed(
               2
             )}`}</span>
+            <span data-testid='frete'>
+              {frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}
+            </span>
+            <span data-testid='total'>{`${
+              cartItems.length
+            } items: R$${totalPrice.toFixed(2)}`}</span>
             <button
               className='payment-button'
               onClick={() => navigate('/payment')}
