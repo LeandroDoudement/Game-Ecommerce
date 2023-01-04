@@ -105,6 +105,11 @@ hr {
   color: white;
 }
 
+.payment-button:disabled {
+  background-color: gray;
+  opacity: 0.4;
+}
+
 .empty-cart {
   font-weight: 600;
   font-size: 16px;

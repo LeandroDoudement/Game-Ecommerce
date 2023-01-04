@@ -110,6 +110,7 @@ const Cart = () => {
             <button
               className='payment-button'
               onClick={() => navigate('/payment')}
+              disabled={cartItems.length === 0}
             >
               Finalizar compra
             </button>
