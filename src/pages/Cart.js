@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
@@ -7,22 +6,15 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
 import '../styles/Cart.css';
 import { useNavigate } from 'react-router-dom';
+import numberFormatter from '../helpers/numberFormatter';
+import { useSession } from '../context/itens.context';
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!localStorage.getItem('games')) {
-      localStorage.setItem('games', JSON.stringify([]));
-    }
-    setCartItems(JSON.parse(localStorage.getItem('games')));
-  }, []);
+  const {itens, setItens} = useSession()
 
   const updateQuantity = (index, operation) => {
-    setCartItems((prevItems) => {
-      const newItems = [...prevItems];
+      const newItems = [...itens];
       if (newItems[index].quantity === 1 && operation === '-') {
         newItems[index].quantity = 1;
       } else {
@@ -31,36 +23,34 @@ const Cart = () => {
             ? newItems[index].quantity + 1
             : newItems[index].quantity - 1;
       }
-      localStorage.setItem('games', JSON.stringify(newItems));
-      return newItems;
-    });
+      setItens(newItems)
   };
 
   const removeCartItem = (item) => {
-    const newItems = cartItems.filter((element) => element !== item);
-    localStorage.setItem('games', JSON.stringify(newItems));
-    setCartItems(newItems);
+    const newItems = itens.filter((element) => element !== item);
+    setItens(newItems);
   };
 
-  const subTotal = cartItems.reduce(
+  const subTotal = itens.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const frete = subTotal > 250 ? 0 : (cartItems.length * 10).toFixed(2);
+  const frete = itens.length * 10;
 
-  const totalPrice = Number(subTotal) + Number(frete);
+  const totalPrice = frete + subTotal;
+
 
   return (
     <div className='cart-page-wrapper'>
-      <Header />
+      <Header itemQuantity={itens.length}/>
       <div className='cart-page'>
         <div className='cart-and-payment-wrapper'>
           <div className='cart-box'>
             <span className='cart-title'>Carrinho de compras</span>
-            {cartItems.length === 0 ? (
+            {itens.length === 0 ? (
               <span className='empty-cart'>Seu carrinho está vazio</span>
             ) : (
-              cartItems.map((item, index) => (
+              itens.map((item, index) => (
                 <div className='item-wrapper' key={index}>
                   <div className='item' data-testid='item'>
                     <FontAwesomeIcon
@@ -88,9 +78,7 @@ const Cart = () => {
                       onClick={() => updateQuantity(index, '+')}
                       data-testid='subtract-quantity-button'
                     />
-                    <span>{`R$${(item.price * item.quantity).toFixed(
-                      2
-                    )}`}</span>
+                    <span>{`R$${numberFormatter((item.price * item.quantity))}`}</span>
                   </div>
                   <hr />
                 </div>
@@ -98,19 +86,15 @@ const Cart = () => {
             )}
           </div>
           <div className='total-price-box'>
-            <span data-testid='subtotal'>{`Subtotal: ${subTotal.toFixed(
-              2
-            )}`}</span>
+            <span data-testid='subtotal'>{`Subtotal: R$${numberFormatter(subTotal)}`}</span>
             <span data-testid='frete'>
-              {frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}
+              {subTotal > 250 ? `Frete Gratis!` : `Frete: R$${numberFormatter(frete)}`}
             </span>
-            <span data-testid='total'>{`${
-              cartItems.length
-            } items: R$${totalPrice.toFixed(2)}`}</span>
+            <span data-testid='total'>{`Preço Total: R$${numberFormatter(totalPrice)}`}</span>
             <button
               className='payment-button'
               onClick={() => navigate('/payment')}
-              disabled={cartItems.length === 0}
+              disabled={itens.length === 0}
             >
               Finalizar compra
             </button>

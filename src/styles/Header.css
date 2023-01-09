@@ -40,3 +40,18 @@ header {
 .home-icon {
   cursor: pointer;
 }
+
+.badge {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  line-height: 10px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+  text-align: center;
+  font-size: 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
