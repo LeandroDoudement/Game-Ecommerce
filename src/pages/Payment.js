@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable no-useless-escape */
 import React, { useState } from 'react';
 import Header from '../components/Header';
@@ -17,8 +18,7 @@ const Payment = () => {
   const [cardCVC, setCardCVC] = useState('');
 
   const navigate = useNavigate();
-  const {itens, setItens} = useSession()
-
+  const { itens, setItens } = useSession();
 
   const removeCartItem = (item) => {
     const newItems = itens.filter((element) => element !== item);
@@ -35,10 +35,10 @@ const Payment = () => {
           ? newItems[index].quantity + 1
           : newItems[index].quantity - 1;
     }
-    setItens(newItems)
-};
+    setItens(newItems);
+  };
 
-  const cardNumberRegex = /"^[0-9]{13,19}$"/;
+  const cardNumberRegex = /^\d{4}[\s]?\d{4}[\s]?\d{4}[\s]?\d{4}[\s]?\d{0,4}$/;
   const cardSecurityNumberRegex = /^\d{3}$/;
   const cardExpirationRegex =
     /^(0[1-9]|1[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])$/;
@@ -47,7 +47,7 @@ const Payment = () => {
     const allVerification =
       cardNumberRegex.test(cardNumber) &&
       cardSecurityNumberRegex.test(cardCVC) &&
-      cardExpirationRegex.test(cardExpiration)
+      cardExpirationRegex.test(cardExpiration);
 
     return allVerification;
   };
@@ -63,13 +63,13 @@ const Payment = () => {
     allVerifications.forEach((verification, index) => {
       if (!verification) {
         switch (index) {
-          case 1:
+          case 0:
             invalidFields.push('Número do Cartão');
             break;
-          case 2:
+          case 1:
             invalidFields.push('Data de vencimento do cartão');
             break;
-          case 3:
+          case 2:
             invalidFields.push('CVC');
             break;
           default:
@@ -80,20 +80,24 @@ const Payment = () => {
 
     if (invalidFields.length > 0) {
       alert(
-        `Os seguintes campos estão incorretos e/ou incompletos: ${invalidFields.join(', ')}`
+        `Os seguintes campos estão incorretos e/ou incompletos: ${invalidFields.join(
+          ', '
+        )}`
       );
     }
   };
 
   const validatePayment = () => {
-    if (checkInformationsValidation()) {
+    const validation = checkInformationsValidation();
+    if (validation) {
       alert(
         'Parabéns, sua compra foi realizada, retornando a pagina principal'
       );
-      navigate('/');
       localStorage.removeItem('games');
-      setItens([])
+      setItens([]);
+      navigate('/');
     } else {
+      console.log('entrou');
       displayIncorrectInformations();
     }
   };
@@ -108,7 +112,7 @@ const Payment = () => {
 
   return (
     <div className='payment-page'>
-      <Header itemQuantity={itens.length}/>
+      <Header itemQuantity={itens.length} />
       <div className='cart-and-form-wrapper'>
         <div className='cart-box'>
           <span className='cart-title'>Revise seus produtos</span>
@@ -138,7 +142,9 @@ const Payment = () => {
                     icon={faPlus}
                     onClick={() => updateQuantity(index, '+')}
                   />
-                  <span>{`R$${numberFormatter((item.price * item.quantity))}`}</span>
+                  <span>{`R$${numberFormatter(
+                    item.price * item.quantity
+                  )}`}</span>
                 </div>
                 <hr />
               </div>
@@ -146,52 +152,27 @@ const Payment = () => {
           )}
           <div className='payment-wrapper'>
             <span>{`Subtotal: R$${numberFormatter(subTotal)}`}</span>
-            <span>{subTotal > 250 ? `Frete Gratis!` : `Frete: R$${numberFormatter(frete)}`}</span>
+            <span>
+              {subTotal > 250
+                ? `Frete Gratis!`
+                : `Frete: R$${numberFormatter(frete)}`}
+            </span>
             <span>{`Preço Total: R$${numberFormatter(totalPrice)}`}</span>
           </div>
         </div>
         <div className='form-wrapper'>
           <span className='informations-title'>Informações do comprador:</span>
           <form action=''>
-            <input
-              type='name'
-              placeholder='Nome Completo'
-            />
-            <input
-              type='cpf'
-              placeholder='CPF'
-            />
-            <input
-              type='email'
-              placeholder='Email'
-            />
-            <input
-              type='phone'
-              placeholder='Telefone Celular'
-            />
-            <input
-              type='phone'
-              placeholder='Telefone Residencial'
-            />
-            <input
-              type='adress'
-              placeholder='Endereço'
-            />
-            <input
-              type='text'
-              placeholder='Complemento'
-            />
-            <input
-              type='text'
-              placeholder='Número'
-            />
-            <input
-              type='Cidade'
-              placeholder='Cidade'
-            />
-            <select
-              className='states-select'
-            >
+            <input type='name' placeholder='Nome Completo' />
+            <input type='cpf' placeholder='CPF' />
+            <input type='email' placeholder='Email' />
+            <input type='phone' placeholder='Telefone Celular' />
+            <input type='phone' placeholder='Telefone Residencial' />
+            <input type='adress' placeholder='Endereço' />
+            <input type='text' placeholder='Complemento' />
+            <input type='text' placeholder='Número' />
+            <input type='Cidade' placeholder='Cidade' />
+            <select className='states-select'>
               <option value=''>UF</option>
               {states.map((state) => (
                 <option value={state.uf} key={state.uf}>
@@ -221,10 +202,11 @@ const Payment = () => {
               maxLength='3'
             />
           </form>
-          <button 
-          className='payment-button' 
-          onClick={() => validatePayment()}
-          disabled={itens.length === 0}>
+          <button
+            className='payment-button'
+            onClick={() => validatePayment()}
+            disabled={itens.length === 0}
+          >
             Finalizar compra
           </button>
         </div>
