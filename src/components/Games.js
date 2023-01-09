@@ -1,14 +1,16 @@
-/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import Loading from './Loading';
-import products from '../products.json';
+import products from '../constants/products';
 import '../styles/Games.css';
+import numberFormatter from '../helpers/numberFormatter'
+import { useSession } from '../context/itens.context';
 
 const Games = () => {
   const [filterOrder, setFilterOrder] = useState('');
   const [gamesList, setGamesList] = useState([]);
   const [newGamesList, setNewGamesList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {itens, setItens} = useSession()
 
   useEffect(() => {
     setLoading(true);
@@ -44,24 +46,19 @@ const Games = () => {
   }, [newGamesList]);
 
   const addToCart = (game) => {
-    let cartItems;
-    const checkIfAlreadyExists = localStorage.getItem('games')
-      ? JSON.parse(localStorage.getItem('games')).some(
-          (element) => JSON.stringify(element) === JSON.stringify(game)
-        )
-      : false;
-    if (checkIfAlreadyExists) {
-      alert(
-        'Você já adicionou esse produto, para aumentar a quantidade siga ao carrinho'
-      );
-      return;
-    }
-    if (localStorage.getItem('games')) {
-      cartItems = [...JSON.parse(localStorage.getItem('games')), game];
+    const item = itens.find((item) => item.id === game.id);
+    let cartItems = [...itens];
+    if (item) {
+      cartItems = itens.map((elem) => {
+        console.log({elem, game})
+        return elem.id === game.id
+          ? { ...elem, quantity: elem.quantity + 1 }
+          : elem;
+      });
     } else {
-      cartItems = [game];
+      cartItems.push(game);
     }
-    localStorage.setItem('games', JSON.stringify(cartItems));
+    setItens(cartItems);
   };
 
   return (
@@ -71,38 +68,42 @@ const Games = () => {
         onChange={({ target: { value } }) => setFilterOrder(value)}
         data-testid='filter'
       >
-        <option value=''>Ordernar por</option>
-        <option value='popularidade'>Ordernar por popularidade</option>
-        <option value='alfabetica'>Ordernar por ordem alfabética</option>
-        <option value='preço'>Ordernar por preço</option>
+        <option value=''>Ordenar por</option>
+        <option value='popularidade'>Ordenar por popularidade</option>
+        <option value='alfabetica'>Ordenar por ordem alfabética</option>
+        <option value='preço'>Ordenar por preço</option>
       </select>
       <div className='games-list'>
         <div className='games-wrapper'>
-        {loading ? (
-          <Loading />
-        ) : (
-          gamesList.map((game) => (
-            <div className='game' key={game.id} data-testid='game'>
-              <div className='score'>
-                <span className='game-score'>{`Score:${game.score}`}</span>
+          {loading ? (
+            <Loading />
+          ) : (
+            gamesList.map((game) => (
+              <div className='game' key={game.id} data-testid='game'>
+                <div className='score'>
+                  <span className='game-score'>{`Score:${game.score}`}</span>
+                </div>
+                <img
+                  src={require(`../images/${game.image}`)}
+                  alt={game.name}
+                  className='game-image'
+                />
+                <span className='game-name' data-testid='game-name'>
+                  {game.name}
+                </span>
+                <span className='game-price'>{`R$${numberFormatter(game.price)}`}</span>
+                <button
+                  type='button'
+                  className='add-to-cart'
+                  onClick={() => addToCart(game)}
+                  data-testid='add-to-cart-button'
+                >
+                  Adicionar ao carrinho
+                </button>
               </div>
-              <img src={require(`../images/${game.image}`)} alt={game.name} className='game-image' />
-              <span className='game-name' data-testid='game-name'>
-                {game.name}
-              </span>
-              <span className='game-price'>{`R$${game.price.toFixed(2)}`}</span>
-              <button
-                type='button'
-                className='add-to-cart'
-                onClick={() => addToCart(game)}
-                data-testid='add-to-cart-button'
-              >
-                Adicionar ao carrinho
-              </button>
-            </div>
-          ))
-        )}
-      </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

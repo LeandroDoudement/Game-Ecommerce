@@ -5,10 +5,11 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import controller from '../images/controller.png';
 import '../styles/Header.css';
 import { useNavigate } from 'react-router-dom';
+import { useSession } from '../context/itens.context';
 
 const Header = () => {
   const navigate = useNavigate();
-
+  const context = useSession()
   return (
     <header>
       <div className='home-wrapper'>
@@ -27,6 +28,7 @@ const Header = () => {
           onClick={() => navigate('/cart')}
           data-testid='cart-icon'
         />
+        <span className="badge">{context.itens.length}</span>
         <span className='icon-title'>Carrinho</span>
       </div>
     </header>

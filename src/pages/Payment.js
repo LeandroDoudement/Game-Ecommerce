@@ -1,135 +1,76 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
-import states from '../states';
+import states from '../constants/states';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import '../styles/Payment.css';
 import { useNavigate } from 'react-router-dom';
+import numberFormatter from '../helpers/numberFormatter';
+import { useSession } from '../context/itens.context';
 
 const Payment = () => {
-  // phone, residentialPhone, adressComplement e adressNumber ficaram sem uso no momento 
-  // pois não acho que deveriam ser obrigatórios pra fazer um pagamento. 
-  // Mas é claro que em uma aplicação real seria necessário, 
-  // no caso dessa que é apenas uma mini simulação, deixei sem obrigatoriedade.
-  const [cartItems, setCartItems] = useState([]);
-  const [username, setUsername] = useState('');
-  const [CPF, setCPF] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [residentialPhone, setResidentialPhone] = useState('');
-  const [adress, setAdress] = useState('');
-  const [adressComplement, setAdressComplement] = useState('');
-  const [adressNumber, setAdressNumber] = useState('');
-  const [adressState, setAdressState] = useState('');
-  const [adressCity, setAdressCity] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [cardExpiration, setCardExpiration] = useState('');
   const [cardCVC, setCardCVC] = useState('');
 
   const navigate = useNavigate();
+  const {itens, setItens} = useSession()
 
-  useEffect(() => {
-    if (!localStorage.getItem('games')) {
-      localStorage.setItem('games', JSON.stringify([]));
-    }
-    setCartItems(JSON.parse(localStorage.getItem('games')));
-  }, []);
 
   const removeCartItem = (item) => {
-    const newItems = cartItems.filter((element) => element !== item);
-    localStorage.setItem('games', JSON.stringify(newItems));
-    setCartItems(newItems);
+    const newItems = itens.filter((element) => element !== item);
+    setItens(newItems);
   };
 
   const updateQuantity = (index, operation) => {
-    setCartItems((prevItems) => {
-      const newItems = [...prevItems];
-      if (newItems[index].quantity === 1 && operation === '-') {
-        newItems[index].quantity = 1;
-      } else {
-        newItems[index].quantity =
-          operation === '+'
-            ? newItems[index].quantity + 1
-            : newItems[index].quantity - 1;
-      }
-      return newItems;
-    });
-  };
+    const newItems = [...itens];
+    if (newItems[index].quantity === 1 && operation === '-') {
+      newItems[index].quantity = 1;
+    } else {
+      newItems[index].quantity =
+        operation === '+'
+          ? newItems[index].quantity + 1
+          : newItems[index].quantity - 1;
+    }
+    setItens(newItems)
+};
 
-  const nameRegex = /^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$/;
-  const CPFRegex =
-    /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-  const cardNumberRegex = /^\d{4} \d{4} \d{4} \d{4}$/;
+  const cardNumberRegex = /"^[0-9]{13,19}$"/;
   const cardSecurityNumberRegex = /^\d{3}$/;
   const cardExpirationRegex =
     /^(0[1-9]|1[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])$/;
-  const adressVerification = adress.length > 5;
-  const cityVerification = adressCity.length > 3;
-  const stateVerification = adressState !== '';
 
   const checkInformationsValidation = () => {
     const allVerification =
-      nameRegex.test(username) &&
-      CPFRegex.test(CPF) &&
-      emailRegex.test(email) &&
       cardNumberRegex.test(cardNumber) &&
       cardSecurityNumberRegex.test(cardCVC) &&
-      cardExpirationRegex.test(cardExpiration) &&
-      adressVerification &&
-      cityVerification &&
-      stateVerification;
+      cardExpirationRegex.test(cardExpiration)
 
     return allVerification;
   };
 
   const displayIncorrectInformations = () => {
     const allVerifications = [
-      nameRegex.test(username),
-      CPFRegex.test(CPF),
-      emailRegex.test(email),
       cardNumberRegex.test(cardNumber),
       cardSecurityNumberRegex.test(cardCVC),
       cardExpirationRegex.test(cardExpiration),
-      adressVerification,
-      cityVerification,
-      stateVerification,
     ];
 
     const invalidFields = [];
     allVerifications.forEach((verification, index) => {
       if (!verification) {
         switch (index) {
-          case 0:
-            invalidFields.push('Nome Completo');
-            break;
           case 1:
-            invalidFields.push('CPF');
-            break;
-          case 2:
-            invalidFields.push('Email');
-            break;
-          case 3:
             invalidFields.push('Número do Cartão');
             break;
-          case 4:
+          case 2:
             invalidFields.push('Data de vencimento do cartão');
             break;
-          case 5:
+          case 3:
             invalidFields.push('CVC');
-            break;
-          case 6:
-            invalidFields.push('Endereço');
-            break;
-          case 7:
-            invalidFields.push('Cidade');
-            break;
-          case 8:
-            invalidFields.push('Estado');
             break;
           default:
             break;
@@ -139,45 +80,42 @@ const Payment = () => {
 
     if (invalidFields.length > 0) {
       alert(
-        `Os seguintes campos estão incorretos: ${invalidFields.join(', ')}`
+        `Os seguintes campos estão incorretos e/ou incompletos: ${invalidFields.join(', ')}`
       );
     }
   };
 
   const validatePayment = () => {
-    if (cartItems.length === 0) {
-      alert('Seu carrinho está vazio, retornando a pagina principal');
-      navigate('/');
-    }
     if (checkInformationsValidation()) {
       alert(
         'Parabéns, sua compra foi realizada, retornando a pagina principal'
       );
       navigate('/');
       localStorage.removeItem('games');
+      setItens([])
     } else {
       displayIncorrectInformations();
     }
   };
 
-  const subTotal = cartItems.reduce(
+  const subTotal = itens.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const frete = subTotal > 250 ? 0 : (cartItems.length * 10).toFixed(2);
+  const frete = itens.length * 10;
 
-  const totalPrice = Number(subTotal) + Number(frete);
+  const totalPrice = frete + subTotal;
 
   return (
     <div className='payment-page'>
-      <Header />
+      <Header itemQuantity={itens.length}/>
       <div className='cart-and-form-wrapper'>
         <div className='cart-box'>
           <span className='cart-title'>Revise seus produtos</span>
-          {cartItems.length === 0 ? (
+          {itens.length === 0 ? (
             <span className='empty-cart'>Seu carrinho está vazio</span>
           ) : (
-            cartItems.map((item, index) => (
+            itens.map((item, index) => (
               <div className='item-wrapper' key={index}>
                 <div className='item'>
                   <FontAwesomeIcon
@@ -200,18 +138,16 @@ const Payment = () => {
                     icon={faPlus}
                     onClick={() => updateQuantity(index, '+')}
                   />
-                  <span>{`R$${(item.price * item.quantity).toFixed(2)}`}</span>
+                  <span>{`R$${numberFormatter((item.price * item.quantity))}`}</span>
                 </div>
                 <hr />
               </div>
             ))
           )}
           <div className='payment-wrapper'>
-            <span>{`Subtotal: ${subTotal}`}</span>
-            <span>{frete === 0 ? `Frete Gratis!` : `Frete: ${frete}`}</span>
-            <span>{`${cartItems.length} items: R$${totalPrice.toFixed(
-              2
-            )}`}</span>
+            <span>{`Subtotal: R$${numberFormatter(subTotal)}`}</span>
+            <span>{subTotal > 250 ? `Frete Gratis!` : `Frete: R$${numberFormatter(frete)}`}</span>
+            <span>{`Preço Total: R$${numberFormatter(totalPrice)}`}</span>
           </div>
         </div>
         <div className='form-wrapper'>
@@ -219,54 +155,44 @@ const Payment = () => {
           <form action=''>
             <input
               type='name'
-              placeholder='Nome Completo*'
-              onChange={({ target: { value } }) => setUsername(value)}
+              placeholder='Nome Completo'
             />
             <input
               type='cpf'
-              placeholder='CPF*'
-              onChange={({ target: { value } }) => setCPF(value)}
+              placeholder='CPF'
             />
             <input
               type='email'
-              placeholder='Email*'
-              onChange={({ target: { value } }) => setEmail(value)}
+              placeholder='Email'
             />
             <input
               type='phone'
               placeholder='Telefone Celular'
-              onChange={({ target: { value } }) => setPhone(value)}
             />
             <input
               type='phone'
               placeholder='Telefone Residencial'
-              onChange={({ target: { value } }) => setResidentialPhone(value)}
             />
             <input
               type='adress'
-              placeholder='Endereço*'
-              onChange={({ target: { value } }) => setAdress(value)}
+              placeholder='Endereço'
             />
             <input
               type='text'
               placeholder='Complemento'
-              onChange={({ target: { value } }) => setAdressComplement(value)}
             />
             <input
               type='text'
               placeholder='Número'
-              onChange={({ target: { value } }) => setAdressNumber(value)}
             />
             <input
               type='Cidade'
-              placeholder='Cidade*'
-              onChange={({ target: { value } }) => setAdressCity(value)}
+              placeholder='Cidade'
             />
             <select
-              onChange={({ target: { value } }) => setAdressState(value)}
               className='states-select'
             >
-              <option value=''>UF*</option>
+              <option value=''>UF</option>
               {states.map((state) => (
                 <option value={state.uf} key={state.uf}>
                   {state.nome}
@@ -278,21 +204,27 @@ const Payment = () => {
           <form action=''>
             <input
               type='text'
-              placeholder='Número do cartão*'
+              placeholder='Número do cartão *'
               onChange={({ target: { value } }) => setCardNumber(value)}
+              maxLength='19'
             />
             <input
               type='text'
-              placeholder='Data de vencimento*'
+              placeholder='Data de vencimento *'
               onChange={({ target: { value } }) => setCardExpiration(value)}
+              maxLength='5'
             />
             <input
               type='tex'
-              placeholder='CVC*'
+              placeholder='CVC *'
               onChange={({ target: { value } }) => setCardCVC(value)}
+              maxLength='3'
             />
           </form>
-          <button className='payment-button' onClick={() => validatePayment()}>
+          <button 
+          className='payment-button' 
+          onClick={() => validatePayment()}
+          disabled={itens.length === 0}>
             Finalizar compra
           </button>
         </div>
